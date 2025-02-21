@@ -1,0 +1,117 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  3.0.x                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      blockMeshDict;
+}
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+#include "variables"
+convertToMeters 1;
+
+vertices
+(
+ (#calc "$xllcorner"	                        #calc "$yllcorner"	                   #calc "$ZMIN")
+ (#calc "$inletxLLcorner"  	                #calc "$yllcorner"	                   #calc "$ZMIN")
+ (#calc "$xllcorner + $cellsize * $ncols"	#calc "$yllcorner"	                   #calc "$ZMIN")
+ (#calc "$xllcorner + $cellsize * $ncols"	#calc "$inletyLLCorner"	                   #calc "$ZMIN")
+ (#calc "$xllcorner + $cellsize * $ncols"	#calc "$yllcorner + $cellsize * $nrows"    #calc "$ZMIN")
+ (#calc "$inletxLLcorner + $inletsize"	        #calc "$yllcorner + $cellsize * $nrows"    #calc "$ZMIN")
+ (#calc "$inletxLLcorner"	                #calc "$yllcorner + $cellsize * $nrows"    #calc "$ZMIN")
+ (#calc "$xllcorner"                      	#calc "$yllcorner + $cellsize * $nrows"    #calc "$ZMIN")
+ (#calc "$xllcorner"               	        #calc "$yllcorner"	                   #calc "$ZMAX")
+ (#calc "$inletxLLcorner"	                #calc "$yllcorner"	                   #calc "$ZMAX")
+ (#calc "$xllcorner + $cellsize * $ncols"	#calc "$yllcorner"	                   #calc "$ZMAX")
+ (#calc "$xllcorner + $cellsize * $ncols"	#calc "$inletyLLCorner"	                   #calc "$ZMAX")
+ (#calc "$xllcorner + $cellsize * $ncols"	#calc "$yllcorner + $cellsize * $nrows"	   #calc "$ZMAX")
+ (#calc "$inletxLLcorner + $inletsize"	        #calc "$yllcorner + $cellsize * $nrows"	   #calc "$ZMAX")
+ (#calc "$inletxLLcorner"	                #calc "$yllcorner + $cellsize * $nrows"	   #calc "$ZMAX")
+ (#calc "$xllcorner"	                        #calc "$yllcorner + $cellsize * $nrows"	   #calc "$ZMAX")
+ (#calc "$inletxLLcorner"	                #calc "$inletyLLCorner"	                   #calc "$ZMIN")
+ (#calc "$inletxLLcorner + $inletsize"	        #calc "$inletyLLCorner"	                   #calc "$ZMIN")
+ (#calc "$inletxLLcorner + $inletsize"	        #calc "$inletyLLCorner + $inletsize"	   #calc "$ZMIN")
+ (#calc "$inletxLLcorner"	                #calc "$inletyLLCorner + $inletsize"	   #calc "$ZMIN")
+ (#calc "$inletxLLcorner"	                #calc "$inletyLLCorner"	                   #calc "$ZMAX")
+ (#calc "$inletxLLcorner + $inletsize"	        #calc "$inletyLLCorner"	                   #calc "$ZMAX")
+ (#calc "$inletxLLcorner + $inletsize"	        #calc "$inletyLLCorner + $inletsize"	   #calc "$ZMAX")
+ (#calc "$inletxLLcorner"	                #calc "$inletyLLCorner + $inletsize"	   #calc "$ZMAX")
+);
+
+blocks
+(
+ hex (0  1  6  7  8  9  14 15) (194 225 50) simpleGrading (1 1 1) // block 1
+ hex (1  2  3  16 9  10 11 20) (29  81  50) simpleGrading (1 1 1) // block 2
+ hex (17 3  4  5  21 11 12 13) (27  144 50) simpleGrading (1 1 1) // block 3
+ hex (19 18 5  6  23 22 13 14) (2   142 50) simpleGrading (1 1 1) // block 4
+ hex (16 17 18 19 20 21 22 23) (2   2   50) simpleGrading (1 1 1) // block 5, inlet
+);
+
+edges
+(
+);
+
+boundary
+(
+    atm
+    {
+        type patch;
+        faces
+        (
+	 //(3 7 6 2)
+	 // (1 5 4 0)
+	 // (0 4 7 3)
+	 // (2 6 5 1)
+	 (7 15 14 6)
+	 (6 14 13 5)
+
+	
+	(1 9 10 2) //broken 
+	(0 8 9 1) // broken 
+	(5 13 12 4) //broken 
+	(2 10 11 3) // broken
+	(3 11 12 4) // broken 
+	 //(7 15 14 13 12 4 5 6)
+	 //(0 8 9 10 2 1)
+	 //(0 8 15 7)
+	 //(4 12 11 10 2 3)
+        );
+    }
+    top
+    {
+        type patch;
+        faces
+        (
+	 (8 15 14 9)
+	 (9 20 11 10)
+	 (21 13 12 11)
+	 (23 14 13 22)
+	 (20 23 22 21)
+	 //	 (8 15 14 13 12 11 10 9)
+	 //(4 5 6 7)
+        );
+    }
+    bottom
+    {
+        type patch;
+        faces
+        (
+	 (0 7 6 1)
+	 (1 16 3 2)
+	 (17 5 4 3)
+	 (19 6 5 18)
+	 (16 19 18 17) // inlet
+
+        );
+    }
+);
+
+// ************************************************************************* //

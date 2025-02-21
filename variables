@@ -1,0 +1,10 @@
+ncols          #calc "4460";     
+nrows          #calc "4500";      
+xllcorner      #calc "458000";  
+yllcorner      #calc "4095220"; 
+cellsize       #calc "0.5";       
+inletsize      #calc "20";        
+inletxLLcorner #calc "459940";    
+inletyLLCorner #calc "4096030";   
+ZMIN           #calc "0";         
+ZMAX           #calc "1000";   
